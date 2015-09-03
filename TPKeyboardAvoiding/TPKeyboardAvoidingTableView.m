@@ -18,6 +18,7 @@
 - (void)setup {
     if ( [self hasAutomaticKeyboardAvoidingBehaviour] ) return;
     
+    self.textFieldDelegates = [NSMutableArray array];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TPKeyboardAvoiding_keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(TPKeyboardAvoiding_keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(scrollToActiveTextField) name:UITextViewTextDidBeginEditingNotification object:nil];
@@ -106,6 +107,19 @@
     }
     return YES;
 }
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    // I just need to do work in this delegate fct, I always want the shouldChangeCharacterInRange to return YES
+    // this may not apply to everyone.
+    for (id<UITextFieldDelegate> aDelegate in self.textFieldDelegates) {
+        if(aDelegate && [aDelegate respondsToSelector:@selector(textField:shouldChangeCharactersInRange:replacementString:)]) {
+            [aDelegate textField:textField shouldChangeCharactersInRange:range replacementString:string];
+        }
+    }
+    return YES;
+}
+
 
 -(void)layoutSubviews {
     [super layoutSubviews];

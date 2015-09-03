@@ -12,4 +12,7 @@
 @interface TPKeyboardAvoidingTableView : UITableView <UITextFieldDelegate, UITextViewDelegate>
 - (BOOL)focusNextTextField;
 - (void)scrollToActiveTextField;
+
+@property (strong, nonatomic) NSMutableArray *textFieldDelegates;
+
 @end
